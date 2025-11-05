@@ -5,15 +5,15 @@
     const datosJSON = '{ "usuarios": [ { "index": 0, "name": "Juan", "mobile": "698186870", "email": "juan.borrajo+firma@docuten.com", "typeCode": "BIOMETRIC" }, { "index": 1, "name": "Brais", "mobile": "698186870", "email": "brais.blanco+firma@docuten.com", "typeCode": "OTP" } ] }';
 
 
-    function fillFields(elements) {
+    function fillAllFields(elements) {
         let sizeElements = elements.length;
         for (let counterElement = 0; counterElement < sizeElements; ++counterElement) {
-            fillField(elements[counterElement]);
+            fillSingleField(elements[counterElement]);
         }
     }
 
     
-    function fillField(elementFilleable) {
+    function fillSingleField(elementFilleable) {
         const genericInput = document.querySelector(elementFilleable.elementId);
         if (genericInput) {
             genericInput.value = elementFilleable.valueField;
@@ -39,7 +39,7 @@
 
     /**
      * Toma un objeto de usuario del JSON y lo convierte al formato
-     * que la función fillFields() espera.
+     * que la función fillAllFields() espera.
      */
     function transformarUsuarioParaFormulario(usuario) {
         const datosFormateados = [
@@ -81,7 +81,7 @@
         
         const datosParaFormulario = transformarUsuarioParaFormulario(usuario);
         
-        fillFields(datosParaFormulario);
+        fillAllFields(datosParaFormulario);
     }
     console.log("Campos rellenados.");
 
