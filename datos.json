@@ -1,0 +1,18 @@
+{
+  "usuarios": [
+    {
+      "index": 0,
+      "name": "Juan",
+      "mobile": "698186870",
+      "email": "juan.borrajo+firma@docuten.com",
+      "typeCode": "BIOMETRIC"
+    },
+    {
+      "index": 1,
+      "name": "Brais",
+      "mobile": "698186870",
+      "email": "brais.blanco+firma@docuten.com",
+      "typeCode": "OTP"
+    }
+  ]
+}
