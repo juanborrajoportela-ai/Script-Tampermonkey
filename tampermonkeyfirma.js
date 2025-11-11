@@ -1,8 +1,19 @@
+// ==UserScript==
+// @name         Tu Script de Firma
+// @namespace    http://tampermonkey.net/
+// @version      0.2
+// @description  Rellena formularios automáticamente
+// @author       Tú
+// @match        *://URL-DE-LA-PAGINA-DONDE-FUNCIONA/*
+// @grant        GM_getResourceText
+// @resource     misDatosJSON https://raw.githubusercontent.com/juanborrajoportela-ai/Script-Tampermonkey/main/datos.json
+// ==/UserScript==
+
 (function() {
     'use strict';
 
-    // 1. Aquí están tus datos en formato de texto JSON.
-    const datosJSON = '{ "usuarios": [ { "index": 0, "name": "Juan", "mobile": "698186870", "email": "juan.borrajo+firma@docuten.com", "typeCode": "BIOMETRIC" }, { "index": 1, "name": "Brais", "mobile": "698186870", "email": "brais.blanco+firma@docuten.com", "typeCode": "OTP" } ] }';
+    // 1. Aquí leemos los datos desde el archivo externo
+    const datosJSON = GM_getResourceText("misDatosJSON");
 
 
     function fillAllFields(elements) {
@@ -66,7 +77,7 @@
 
     // 3. EJECUCIÓN PRINCIPAL DEL SCRIPT
 
-    // Convertimos el texto JSON en un objeto JavaScript
+    // Convertimos el texto JSON (leído del archivo) en un objeto JavaScript
     const datosObjeto = JSON.parse(datosJSON);
 
     // Rellenamos el título del documento
@@ -76,7 +87,7 @@
     }
 
     // Recorremos la lista de usuarios del objeto JSON
-    console.log("Rellenando campos desde el JSON...");
+    console.log("Rellenando campos desde el JSON externo...");
     for (const usuario of datosObjeto.usuarios) {
         
         const datosParaFormulario = transformarUsuarioParaFormulario(usuario);
