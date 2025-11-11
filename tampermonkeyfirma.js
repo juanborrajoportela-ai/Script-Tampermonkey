@@ -1,14 +1,19 @@
 (function() {
     'use strict';
 
-    function fillFields(elements) {
+    // 1. Aquí están tus datos en formato de texto JSON.
+    const datosJSON = '{ "usuarios": [ { "index": 0, "name": "Juan", "mobile": "698186870", "email": "juan.borrajo+firma@docuten.com", "typeCode": "BIOMETRIC" }, { "index": 1, "name": "Brais", "mobile": "698186870", "email": "brais.blanco+firma@docuten.com", "typeCode": "OTP" } ] }';
+
+
+    function fillAllFields(elements) {
         let sizeElements = elements.length;
         for (let counterElement = 0; counterElement < sizeElements; ++counterElement) {
-            fillField(elements[counterElement]);
+            fillSingleField(elements[counterElement]);
         }
     }
 
-    function fillField(elementFilleable) {
+    
+    function fillSingleField(elementFilleable) {
         const genericInput = document.querySelector(elementFilleable.elementId);
         if (genericInput) {
             genericInput.value = elementFilleable.valueField;
@@ -16,6 +21,7 @@
             console.warn('Elemento no encontrado:', elementFilleable.elementId);
         }
     }
+
 
     function clickButton(elementId) {
         const button = document.getElementById(elementId);
@@ -26,54 +32,60 @@
         }
     }
 
+
     function getSignerFieldSelector(index, fieldName, tag = '') {
         return `${tag}[name="signerInEdition[${index}].${fieldName}"]`;
     }
 
+    /**
+     * Toma un objeto de usuario del JSON y lo convierte al formato
+     * que la función fillAllFields() espera.
+     */
+    function transformarUsuarioParaFormulario(usuario) {
+        const datosFormateados = [
+            {
+                elementId: getSignerFieldSelector(usuario.index, 'name'),
+                valueField: usuario.name
+            },
+            {
+                elementId: getSignerFieldSelector(usuario.index, 'mobile'),
+                valueField: usuario.mobile
+            },
+            {
+                elementId: getSignerFieldSelector(usuario.index, 'email'),
+                valueField: usuario.email
+            },
+            {
+                elementId: getSignerFieldSelector(usuario.index, 'typeCode', 'select'),
+                valueField: usuario.typeCode
+            }
+        ];
+        return datosFormateados;
+    }
 
-    const usuarioJuan = [
-        {
-            elementId: getSignerFieldSelector(0, 'name'), 
-            valueField: 'Juan'
-        },
-        {
-            elementId: getSignerFieldSelector(0, 'mobile'),
-            valueField: '698186870'
-        },
-        {
-            elementId: getSignerFieldSelector(0, 'email'),
-            valueField: 'juan.borrajo+firma@docuten.com'
-        },
-        {
-            elementId: getSignerFieldSelector(0, 'typeCode', 'select'),
-            valueField: 'BIOMETRIC'
-        }
-    ];
 
-    const usuarioBrais = [
-        {
-            elementId: getSignerFieldSelector(1, 'name'),
-            valueField: 'Brais'
-        },
-        {
-            elementId: getSignerFieldSelector(1, 'mobile'),
-            valueField: '698186870'
-        },
-        {
-            elementId: getSignerFieldSelector(1, 'email'),
-            valueField: 'brais.blanco+firma@docuten.com'
-        },
-        {
-            elementId: getSignerFieldSelector(1, 'typeCode', 'select'),
-            valueField: 'OTP'
-        }
-    ];
+    // 3. EJECUCIÓN PRINCIPAL DEL SCRIPT
 
+    // Convertimos el texto JSON en un objeto JavaScript
+    const datosObjeto = JSON.parse(datosJSON);
+
+    // Rellenamos el título del documento
     const documentTitle = document.getElementById('document.title');
-    documentTitle.value = "Prueba BIOMETRIC";
+    if (documentTitle) {
+        documentTitle.value = "Prueba BIOMETRIC";
+    }
 
-    fillFields(usuarioBrais);
-    fillFields(usuarioJuan);
+    // Recorremos la lista de usuarios del objeto JSON
+    console.log("Rellenando campos desde el JSON...");
+    for (const usuario of datosObjeto.usuarios) {
+        
+        const datosParaFormulario = transformarUsuarioParaFormulario(usuario);
+        
+        fillAllFields(datosParaFormulario);
+    }
+    console.log("Campos rellenados.");
+
+    // Hacemos clic en los botones necesarios
     clickButton('btn-finalize-add-template');
     clickButton('btn-add-signer');
     clickButton('btn-pre-continue-sign');
@@ -81,4 +93,5 @@
     clickButton('documentTemplateId');
     clickButton('btn btn-info edit-upload-button');
     clickButton('btn-continue-sign');
+
 })();
